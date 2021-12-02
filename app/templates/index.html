@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Nanocartographer</title>
+    </head>
+    <body>
+        <h1>Nanocartographer GUI - v0.1</h1>
+        <div>
+            <!--<img src="{{ tip_tilt_map }}" alt="Tip/Tilt Map">-->
+            <img src="{{ image }}"/>
+        </div>
+        
+        <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.alpha.label }}<br>
+            {{ form.alpha(size=32) }}
+        </p>
+        <p>
+            {{ form.beta.label }}<br>
+            {{ form.beta(size=32) }}
+        </p>
+        <p>{{ form.update() }}</p>
+    </form>
+    </body>
+</html>

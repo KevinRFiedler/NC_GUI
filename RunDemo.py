@@ -101,7 +101,7 @@ plt.style.use('ggplot')
 
 #Save the plots.   
 print('Saving plots.')       
-plt.savefig('./results/CrystalOrientation.png')
+plt.savefig('./TipTiltMaps/CrystalOrientation.png')
 
 
 print('Done.')
