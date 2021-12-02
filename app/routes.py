@@ -1,36 +1,61 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, redirect, url_for
+from flask import render_template
 from app import app
 from app.forms import ParameterForm
-import io
-import base64
-import os
-import InputParameters
-import Nanocartographer as nc
-import InputParameters as ip #Read in adjustable parameters.
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+import io
+import base64
+import Nanocartographer as nc
 
 
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    full_filename = os.path.join('static', 'TipTiltMaps', 'CrystalOrientation.png')
+    #Use a form to determine the parameters that will make up the tip/tilt map.
     form = ParameterForm()
     
-    #if form.validate_on_submit():#Use this if we care about checking inputs with DataValidators in the form.
-    # db logic goes here
-    #return render_template('test.html')
+    #Parameters of the crystal system for the sample (cubic, trigonal, etc.)
+    a = float(form.a.data)
+    b = float(form.b.data)
+    c = float(form.c.data)
+    alpha_crystal = float(form.alpha_crystal.data)
+    beta_crystal = float(form.beta_crystal.data)
+    gamma_crystal = float(form.gamma_crystal.data)
+    is_hexagonal = form.is_hexagonal.data
+    use_four_index = form.use_four_index.data
     
-    alpha_pole = float(form.alpha.data)
-    beta_pole = float(form.beta.data)
+    #Found pole parameters
+    alpha_pole = float(form.alpha_pole.data)
+    beta_pole = float(form.beta_pole.data)
+    cryst_rot = float(form.cryst_rot.data)
+    found_pole_u = float(form.found_pole_u.data)
+    found_pole_v = float(form.found_pole_v.data)
+    found_pole_w = float(form.found_pole_w.data)
+    found_pole = [found_pole_u, found_pole_v, found_pole_w]
     
-    planes_tip_tilt, poles_tip_tilt, stage_limits = nc.Construct_TipTiltDiagram(ip.a, ip.b, ip.c, ip.alpha_crystal, ip.beta_crystal, ip.gamma_crystal, \
-                                                                           alpha_pole, beta_pole, ip.cryst_rot, \
-                                                                           ip.sample_rot, ip.horizontal_flip, ip.vertical_flip, \
-                                                                           ip.found_pole, ip.is_hexagonal, ip.use_four_index, \
-                                                                           ip.alpha_limit, ip.beta_limit, ip.superellipse_param)
+    #Sample loading parameters
+    sample_rot = float(form.sample_rot.data)
+    horizontal_flip = form.horizontal_flip.data
+    vertical_flip = form.vertical_flip.data
+    
+    #Tip/Tilt limits of the stage.
+    alpha_limit = float(form.alpha_limit.data)
+    beta_limit = float(form.beta_limit.data)
+    superellipse_param = float(form.superellipse_param.data)
+    
+    #Plotting parameters
+    min_beta = float(form.min_beta.data)
+    max_beta = float(form.max_beta.data)
+    min_alpha = float(form.min_alpha.data)
+    max_alpha = float(form.max_alpha.data)
+    
+    planes_tip_tilt, poles_tip_tilt, stage_limits = nc.Construct_TipTiltDiagram(a, b, c, alpha_crystal, beta_crystal, gamma_crystal, \
+                                                                           alpha_pole, beta_pole, cryst_rot, \
+                                                                           sample_rot, horizontal_flip, vertical_flip, \
+                                                                           found_pole, is_hexagonal, use_four_index, \
+                                                                           alpha_limit, beta_limit, superellipse_param)
     
     plt_fig = Figure()    
     plt_ax = plt_fig.subplots()
@@ -50,13 +75,12 @@ def index():
 
     #Make the aspect ratio correct and zoom in on the stage limits.
     plt_ax.set_aspect('equal', 'box')
-    plt_ax.set_ylim(ip.min_beta, ip.max_beta)
-    plt_ax.set_xlim(ip.min_alpha, ip.max_alpha)
+    plt_ax.set_ylim(min_beta, max_beta)
+    plt_ax.set_xlim(min_alpha, max_alpha)
     plt_ax.legend(loc='upper right', bbox_to_anchor=(1.4, 1)) #Move the legend off the diagram itself.
     plt_ax.set_xlabel('alpha')
     plt_ax.set_ylabel('beta')
     plt_ax.grid(visible=True)
-    #plt_ax.set_style.use('ggplot')
     
     # Convert plot to PNG image
     pngImage = io.BytesIO()
@@ -65,7 +89,5 @@ def index():
     # Encode PNG image to base64 string
     pngImageB64String = "data:image/png;base64,"
     pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
-
-
     
     return render_template('index.html', image = pngImageB64String, form = form)
