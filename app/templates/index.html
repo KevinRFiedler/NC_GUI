@@ -2,118 +2,112 @@
 <html>
     <head>
         <title>Nanocartographer</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     </head>
     <body>
         <h1>Nanocartographer GUI - v0.1</h1>
-        <div>
-            <!--<img src="{{ tip_tilt_map }}" alt="Tip/Tilt Map">-->
-            <img src="{{ image }}"/>
+        <div class="row">
+            <div class="column">
+                <!--<h3>Tip/Tilt Map</h3>-->
+                <!--<img src="{{ tip_tilt_map }}" alt="Tip/Tilt Map">-->
+                <img src="{{ image }}"/>
+            </div>
+            <div class="column">
+                <!--<h3>Parameters</h3>-->
+                <div style="text-align:center">
+                <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <p>
+                    <strong>Crystal Parameters</strong><br>
+                    {{ form.a.label }}
+                    {{ form.a(size=8) }}
+
+                    {{ form.b.label }}
+                    {{ form.b(size=8) }}
+
+                    {{ form.c.label }}
+                    {{ form.c(size=8) }}
+                    <br>
+                    {{ form.alpha_crystal.label }}
+                    {{ form.alpha_crystal(size=8) }}
+
+                    {{ form.beta_crystal.label }}
+                    {{ form.beta_crystal(size=8) }}
+
+                    {{ form.gamma_crystal.label }}
+                    {{ form.gamma_crystal(size=8) }}
+                    <br>
+                    {{ form.is_hexagonal.label }}
+                    {{ form.is_hexagonal(size=8) }}
+
+                    {{ form.use_four_index.label }}
+                    {{ form.use_four_index(size=8) }}
+                </p>
+                
+                <p>
+                    <strong>Found Pole Parameters</strong><br>
+                    {{ form.alpha_pole.label }}
+                    {{ form.alpha_pole(size=8) }}
+
+                    {{ form.beta_pole.label }}
+                    {{ form.beta_pole(size=8) }}
+                    <br>
+                    {{ form.cryst_rot.label }}
+                    {{ form.cryst_rot(size=8) }}
+                    <br>
+                    {{ form.found_pole_u.label }}
+                    {{ form.found_pole_u(size=8) }}
+
+                    {{ form.found_pole_v.label }}
+                    {{ form.found_pole_v(size=8) }}
+
+                    {{ form.found_pole_w.label }}
+                    {{ form.found_pole_w(size=8) }}
+                </p>   
+                
+                <p>
+                    <strong>Loading Parameters</strong><br>
+                    {{ form.sample_rot.label }}
+                    {{ form.sample_rot(size=8) }}
+                    <br>
+                    {{ form.horizontal_flip.label }}
+                    {{ form.horizontal_flip(size=8) }}
+
+                    {{ form.vertical_flip.label }}
+                    {{ form.vertical_flip(size=8) }}
+                </p> 
+                
+                <p>
+                    <strong>Stage Limit Parameters</strong><br>
+                    {{ form.alpha_limit.label }}
+                    {{ form.alpha_limit(size=8) }}
+
+                    {{ form.beta_limit.label }}
+                    {{ form.beta_limit(size=8) }}
+  
+                    {{ form.superellipse_param.label }}
+                    {{ form.superellipse_param(size=8) }}
+                </p>
+                
+                <p>
+                    <strong>Plotting Parameters</strong><br>
+                    {{ form.min_beta.label }}
+                    {{ form.min_beta(size=8) }}
+
+                    {{ form.max_beta.label }}
+                    {{ form.max_beta(size=8) }}
+                    <br>
+                    {{ form.min_alpha.label }}
+                    {{ form.min_alpha(size=8) }}
+
+                    {{ form.max_alpha.label }}
+                    {{ form.max_alpha(size=8) }}
+                </p>
+                
+                <p>{{ form.update() }}</p>
+                </form>
+                </div>
+            </div>
         </div>
-        
-        <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.a.label }}<br>
-            {{ form.a(size=32) }}
-        </p>
-        <p>
-            {{ form.b.label }}<br>
-            {{ form.b(size=32) }}
-        </p>
-        <p>
-            {{ form.c.label }}<br>
-            {{ form.c(size=32) }}
-        </p>
-        <p>
-            {{ form.alpha_crystal.label }}<br>
-            {{ form.alpha_crystal(size=32) }}
-        </p>
-        <p>
-            {{ form.beta_crystal.label }}<br>
-            {{ form.beta_crystal(size=32) }}
-        </p>
-        <p>
-            {{ form.gamma_crystal.label }}<br>
-            {{ form.gamma_crystal(size=32) }}
-        </p>
-        <p>
-            {{ form.is_hexagonal.label }}<br>
-            {{ form.is_hexagonal(size=32) }}
-        </p>
-        <p>
-            {{ form.use_four_index.label }}<br>
-            {{ form.use_four_index(size=32) }}
-        </p>
-        
-        <p>
-            {{ form.alpha_pole.label }}<br>
-            {{ form.alpha_pole(size=32) }}
-        </p>
-        <p>
-            {{ form.beta_pole.label }}<br>
-            {{ form.beta_pole(size=32) }}
-        </p>  
-        <p>
-            {{ form.cryst_rot.label }}<br>
-            {{ form.cryst_rot(size=32) }}
-        </p>      
-        <p>
-            {{ form.found_pole_u.label }}<br>
-            {{ form.found_pole_u(size=32) }}
-        </p>      
-        <p>
-            {{ form.found_pole_v.label }}<br>
-            {{ form.found_pole_v(size=32) }}
-        </p> 
-        <p>
-            {{ form.found_pole_w.label }}<br>
-            {{ form.found_pole_w(size=32) }}
-        </p>   
-        
-        <p>
-            {{ form.sample_rot.label }}<br>
-            {{ form.sample_rot(size=32) }}
-        </p> 
-        <p>
-            {{ form.horizontal_flip.label }}<br>
-            {{ form.horizontal_flip(size=32) }}
-        </p> 
-        <p>
-            {{ form.vertical_flip.label }}<br>
-            {{ form.vertical_flip(size=32) }}
-        </p> 
-        
-        <p>
-            {{ form.alpha_limit.label }}<br>
-            {{ form.alpha_limit(size=32) }}
-        </p> 
-        <p>
-            {{ form.beta_limit.label }}<br>
-            {{ form.beta_limit(size=32) }}
-        </p> 
-        <p>
-            {{ form.superellipse_param.label }}<br>
-            {{ form.superellipse_param(size=32) }}
-        </p>
-        
-        <p>
-            {{ form.min_beta.label }}<br>
-            {{ form.min_beta(size=32) }}
-        </p>
-        <p>
-            {{ form.max_beta.label }}<br>
-            {{ form.max_beta(size=32) }}
-        </p>
-        <p>
-            {{ form.min_alpha.label }}<br>
-            {{ form.min_alpha(size=32) }}
-        </p>
-        <p>
-            {{ form.max_alpha.label }}<br>
-            {{ form.max_alpha(size=32) }}
-        </p>
-        
-        <p>{{ form.update() }}</p>
-    </form>
     </body>
 </html>
